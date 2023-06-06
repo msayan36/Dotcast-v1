@@ -3,6 +3,11 @@ import bcrypt from "bcryptjs";
 
 const userSchema = mongoose.Schema(
   {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -16,6 +21,33 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    profile_desc: {
+      type: String,
+    },
+    social: [
+      {
+        name: String,
+        link: String,
+      },
+    ],
+    profile_pic: {
+      type: String,
+    },
+    video_ids_array: [
+      {
+        type: String,
+      },
+    ],
+    video_ids_array_recent: [
+      {
+        type: String,
+      },
+    ],
+    follower_ids_array: [
+      {
+        type: String,
+      },
+    ],
   },
   {
     timestamps: true,
