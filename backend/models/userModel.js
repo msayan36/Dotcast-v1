@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema(
     },
     profile_desc: {
       type: String,
+      default: null,
     },
     social: [
       {
@@ -32,6 +33,7 @@ const userSchema = mongoose.Schema(
     ],
     profile_pic: {
       type: String,
+      default: null,
     },
     video_ids_array: [
       {

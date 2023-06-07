@@ -27,7 +27,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, username, email, password } = req.body;
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -35,14 +35,21 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, username, email, password });
 
   if (user) {
     generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
+      username: user.username,
       name: user.name,
       email: user.email,
+      profileDesc: user.profile_desc,
+      social: user.social,
+      profilePic: user.profile_pic,
+      videoIdsArray: user.video_ids_array,
+      videoIdsArrayRecent: user.video_ids_array_recent,
+      followerIdsArray: user.follower_ids_array,
     });
   } else {
     res.status(400);
@@ -68,8 +75,15 @@ const logoutUser = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = {
     _id: req.user._id,
+    username: req.user.username,
     name: req.user.name,
     email: req.user.email,
+    profileDesc: req.user.profile_desc,
+    social: req.user.social,
+    profilePic: req.user.profile_pic,
+    videoIdsArray: req.user.video_ids_array,
+    videoIdsArrayRecent: req.user.video_ids_array_recent,
+    followerIdsArray: req.user.follower_ids_array,
   };
 
   res.status(200).json(user);
@@ -84,17 +98,27 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.profile_desc = req.body.profileDesc || user.profile_desc;
+    user.social = req.body.social || user.social;
+    user.profile_pic = req.body.profilePic || user.profile_pic;
 
     if (req.body.password) {
       user.password = req.body.password;
     }
 
-    const updateduser = await user.save();
+    const updatedUser = await user.save();
 
     res.status(200).json({
-      _id: updateduser._id,
-      name: updateduser.name,
-      email: updateduser.email,
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profileDesc: updatedUser.profile_desc,
+      social: updatedUser.social,
+      profilePic: updatedUser.profile_pic,
+      videoIdsArray: updatedUser.video_ids_array,
+      videoIdsArrayRecent: updatedUser.video_ids_array_recent,
+      followerIdsArray: updatedUser.follower_ids_array,
     });
   } else {
     res.status(404);
